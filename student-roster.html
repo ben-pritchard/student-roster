@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="studentRoster">
+  <head>
+    <meta charset="UTF-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="lib/angular.js"></script>
+    <script src="app.js"></script>
+    <script src="js/StudentsController.js"></script>
+    <title>Student Roster</title>
+  </head>
+  <body>
+    <div class="container" ng-controller="StudentsCtrl">
+      <div class="row">
+        <div class="col-sx-12">
+          <h2>Student List</h2>
+          <ul>
+            <li ng-repeat="item in students">
+            {{item.name}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -5,38 +5,61 @@
     <title>Student App</title>
     <script src="lib/angular.js"></script>
     <script src="app.js"></script>
-    <script src="js/StudentsController.js"></script>
+    <script src="controllers/StudentsController.js"></script>
+    <script src="controllers/FieldTripsController.js"></script>
+    <script src="services/StudentsFactory.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
   </head>
   <body>
-    <div class="container" ng-controller="StudentsCtrl">
-      <h4>Search Students</h4>
-      <form role="form">
-        <input ng-model="query" type="text" placeholder="Search">
-      </form>
-      <h2 ng-show="students.length && filtered.length">Student List</h2>
-      <h2 ng-show="students.length && !filtered.length">No Matches</h2>
-      <ul>
-        <li ng-repeat="item in filtered = (students | filter:query)">
-          <span ng-click="editing = true" ng-hide="editing">
-            {{item.last}}, {{item.name}} <a ng-click="deleteStudent(item)">Delete</a>
-          </span>
-          <span ng-show="editing" ng-submit="editing = false">
-            <form role="form">
-              <input type="text" ng-model="item.name" placeholder="Name" required>
-              <button class="btn btn-default btn-sm" type="submit">Save</button>
-            </form>
-          </span>
-        </li>
-      </ul>
-      <h2>New Student</h2>
-      <form ng-submit="addStudent()" class="form-inline" role="form">
-        <div class="form-group">
-          <input type="text" ng-model="studentName" class="form-control" placeholder="Enter name">
-          <input type="text" ng-model="lastName" class="form-control" placeholder="Enter last name">
+    <div class="container">
+      <div ng-controller="StudentsCtrl">
+        <h4>Search Students</h4>
+        <form role="form">
+          <input ng-model="query" type="text" placeholder="Search">
+        </form>
+        <h2 ng-show="students.length && filtered.length">Student List</h2>
+        <h2 ng-show="students.length && !filtered.length">No Matches</h2>
+        <ul>
+          <li ng-repeat="item in filtered = (students | filter:query)">
+            <span ng-click="editing = true" ng-hide="editing">
+              {{item.lastName}}, {{item.name}} <a ng-click="StudentsFactory.deleteStudent(item)">Delete</a>
+            </span>
+            <span ng-show="editing" ng-submit="editing = false">
+              <form role="form">
+                <input type="text" ng-model="item.name" placeholder="Name" required>
+                <button class="btn btn-default btn-sm" type="submit">Save</button>
+              </form>
+            </span>
+          </li>
+        </ul>
+        <h2>New Student</h2>
+        <form ng-submit="StudentsFactory.addStudent()" class="form-inline" role="form">
+          <div class="form-group">
+            <input type="text" ng-model="StudentsFactory.name" class="form-control" placeholder="Enter name">
+            <input type="text" ng-model="StudentsFactory.lastName" class="form-control" placeholder="Enter last name">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+
+      <div class="row permission" ng-controller="FieldTripsCtrl">
+        <div class="col-md-6" ng-show="studentsWithOutPermission.length">
+          <h2>Without Permission Slips</h2>
+          <ul>
+            <li ng-repeat="item in studentsWithOutPermission = (students | filter:{permissionSlip: false} )">
+              {{ item.lastName }}, {{ item.name }} <a ng-click="addStudentWithPermissionSlip(item)"> - received permission slip -</a>
+            </li>
+          </ul>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+        <div class="col-md-6" ng-show="studentsWithPermission.length">
+          <h2>Permission Slips Received</h2>
+          <ul>
+            <li ng-repeat="item in studentsWithPermission = (students | filter:{permissionSlip: true} )">
+              {{ item.lastName }}, {{ item.name }}
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </body>
 </html>
